@@ -1,0 +1,128 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Source from "../../components/ui/Source.astro";
+export const prerender = true;
+
+interface Props {
+	post: CollectionEntry<"blog">;
+}
+
+export async function getStaticPaths() {
+	const showDrafts = !import.meta.env.PROD;
+	const posts = await getCollection("blog", ({ data }) => showDrafts || !data.draft);
+
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: { post }
+	}));
+}
+
+const { post } = Astro.props as Props;
+const { Content, headings } = await post.render();
+const path = `/blog/${post.slug}/`;
+const formattedDate = post.data.date.toLocaleDateString("en-US", {
+	year: "numeric",
+	month: "long",
+	day: "numeric"
+});
+const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} path={path}>
+	<div class="mx-auto flex w-full max-w-6xl flex-col gap-6">
+		<div class="lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-8">
+			<aside class="hidden lg:block">
+				<nav aria-label="Table of contents" class="theme-surface theme-border sticky top-28 rounded-2xl border p-5">
+					<p class="theme-text-muted text-xs font-semibold uppercase tracking-wide">Table of contents</p>
+					{
+						tocHeadings.length === 0 ? (
+							<p class="theme-text-soft mt-4 text-sm">No headings in this post.</p>
+						) : (
+							<ul class="mt-4 space-y-2">
+								{
+									tocHeadings.map((heading) => (
+										<li>
+											<a
+												href={`#${heading.slug}`}
+												class:list={[
+													"blog-toc-link block text-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400",
+													heading.depth === 3 && "blog-toc-link-soft pl-4"
+												]}
+											>
+												{heading.text}
+											</a>
+										</li>
+									))
+								}
+							</ul>
+						)
+					}
+				</nav>
+			</aside>
+
+			<article class="theme-surface theme-border w-full rounded-2xl border p-6 sm:p-8 lg:p-10">
+				<header class="theme-border border-b pb-6">
+					<p class="blog-category-pill inline-flex items-center rounded-full px-3 py-1 text-xs">{post.data.category}</p>
+					<h1 class="theme-text mt-4 text-3xl font-bold tracking-tight sm:text-4xl">{post.data.title}</h1>
+					<p class="theme-text-muted mt-3">{post.data.description}</p>
+					<div class="theme-text-soft mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+						<span class="theme-text-muted font-medium">{post.data.author.name}</span>
+						<span aria-hidden="true">•</span>
+						<time datetime={post.data.date.toISOString()}>{formattedDate}</time>
+					</div>
+				</header>
+
+			<div class="blog-content theme-text mt-8 space-y-4 leading-7">
+				<Content />
+			</div>
+
+			{post.data.sources.length > 0 && (
+				<footer class="theme-border mt-10 border-t pt-6">
+					<h2 class="theme-text-muted text-xs font-semibold uppercase tracking-wide">Sources</h2>
+					<ul class="mt-4 flex flex-wrap gap-3" role="list">
+						{post.data.sources.map((source) => (
+							<Source
+								href={source.url}
+								title={source.title}
+								label={source.label}
+								meta={source.meta}
+							/>
+						))}
+					</ul>
+				</footer>
+			)}
+			</article>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.blog-toc-link {
+		color: var(--theme-text-muted);
+	}
+
+	.blog-toc-link:hover {
+		color: rgb(125 211 252);
+	}
+
+	.blog-toc-link-soft {
+		color: var(--theme-text-soft);
+	}
+
+	.blog-category-pill {
+		background: var(--theme-surface-strong);
+		color: var(--theme-text-muted);
+	}
+
+	.blog-content :global(a) {
+		color: var(--theme-link);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+
+	.blog-content :global(a:hover) {
+		color: var(--theme-link-hover);
+	}
+</style>

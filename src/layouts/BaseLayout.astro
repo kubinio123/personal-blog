@@ -1,0 +1,62 @@
+---
+import "../styles/global.css";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+
+interface Props {
+	title: string;
+	description: string;
+	path?: string;
+}
+
+const { title, description, path = "/" } = Astro.props;
+const canonicalUrl = new URL(path, Astro.site ?? "https://example.com").toString();
+---
+
+<html lang="en">
+	<head>
+		<script is:inline>
+			const THEME_STORAGE_KEY = "sct-theme";
+			const THEME_DARK = "dark";
+			const THEME_LIGHT = "light";
+			let initialTheme = THEME_LIGHT;
+
+			try {
+				const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+				if (savedTheme === THEME_DARK || savedTheme === THEME_LIGHT) {
+					initialTheme = savedTheme;
+				} else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+					initialTheme = THEME_DARK;
+				}
+			} catch {
+				if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+					initialTheme = THEME_DARK;
+				}
+			}
+
+			document.documentElement.dataset.theme = initialTheme;
+			document.documentElement.style.colorScheme = initialTheme;
+		</script>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalUrl} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalUrl} />
+	</head>
+	<body class="theme-page">
+		<div class="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 sm:px-6 lg:px-8">
+			<SiteHeader />
+			<main class="flex flex-1 flex-col gap-6 pb-6 sm:gap-8 sm:pb-8 lg:gap-10 lg:pb-10">
+				<slot />
+			</main>
+			<SiteFooter />
+		</div>
+	</body>
+</html>

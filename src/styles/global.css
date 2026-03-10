@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+:root {
+	--theme-bg: rgb(248 250 252);
+	--theme-text: rgb(15 23 42);
+	--theme-surface: rgb(241 245 249 / 0.9);
+	--theme-surface-strong: rgb(226 232 240);
+	--theme-border: rgb(148 163 184);
+	--theme-text-muted: rgb(71 85 105);
+	--theme-text-soft: rgb(100 116 139);
+	--theme-link: rgb(14 116 144);
+	--theme-link-hover: rgb(8 145 178);
+	--theme-placeholder: rgb(100 116 139);
+	--theme-input-bg: rgb(255 255 255);
+	--theme-input-border: rgb(100 116 139);
+	--theme-success-bg: rgb(16 185 129 / 0.1);
+	--theme-success-border: rgb(16 185 129 / 0.45);
+	--theme-success-text: rgb(6 95 70);
+	--theme-danger-text: rgb(185 28 28);
+	--heading-size-hero: clamp(2.25rem, 6vw, 3.75rem);
+	--heading-size-section: clamp(1.85rem, 4.5vw, 3rem);
+	--heading-line-tight: 1.08;
+	--heading-tracking-tight: -0.02em;
+}
+
+html[data-theme="dark"] .logo-light {
+	display: none;
+}
+
+html:not([data-theme="dark"]) .logo-dark {
+	display: none;
+}
+
+html[data-theme="dark"] {
+	--theme-bg: rgb(2 6 23);
+	--theme-text: rgb(241 245 249);
+	--theme-surface: rgb(15 23 42 / 0.7);
+	--theme-surface-strong: rgb(30 41 59);
+	--theme-border: rgb(51 65 85);
+	--theme-text-muted: rgb(203 213 225);
+	--theme-text-soft: rgb(148 163 184);
+	--theme-link: rgb(125 211 252);
+	--theme-link-hover: rgb(224 242 254);
+	--theme-placeholder: rgb(148 163 184);
+	--theme-input-bg: rgb(15 23 42);
+	--theme-input-border: rgb(71 85 105);
+	--theme-success-bg: rgb(16 185 129 / 0.1);
+	--theme-success-border: rgb(16 185 129 / 0.4);
+	--theme-success-text: rgb(167 243 208);
+	--theme-danger-text: rgb(252 165 165);
+}
+
+body {
+	transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.theme-page {
+	background-color: var(--theme-bg);
+	color: var(--theme-text);
+}
+
+.theme-surface {
+	background-color: var(--theme-surface);
+}
+
+.theme-surface-strong {
+	background-color: var(--theme-surface-strong);
+}
+
+.theme-border {
+	border-color: var(--theme-border);
+}
+
+.theme-text {
+	color: var(--theme-text);
+}
+
+.theme-text-muted {
+	color: var(--theme-text-muted);
+}
+
+.theme-text-soft {
+	color: var(--theme-text-soft);
+}
+
+.theme-link {
+	color: var(--theme-link);
+}
+
+.theme-link:hover {
+	color: var(--theme-link-hover);
+}

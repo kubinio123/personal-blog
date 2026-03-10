@@ -1,0 +1,44 @@
+---
+const { class: className, href, ...restProps } = Astro.props;
+---
+
+{
+	href ? (
+		<a class:list={["cta-button", className]} href={href} {...restProps}>
+			<slot />
+		</a>
+	) : (
+		<button class:list={["cta-button", className]} {...restProps}>
+			<slot />
+		</button>
+	)
+}
+
+<style>
+	.cta-button {
+		border-radius: 0.375rem;
+		border: 1px solid rgb(0 0 0);
+		background-color: transparent;
+		padding: 0.75rem 1.25rem;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+		font-weight: 600;
+		color: rgb(0 0 0);
+		transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+	}
+
+	.cta-button:hover {
+		background-color: rgb(0 0 0);
+		color: rgb(255 255 255);
+	}
+
+	html[data-theme="dark"] .cta-button {
+		border-color: rgb(255 255 255);
+		color: rgb(255 255 255);
+	}
+
+	html[data-theme="dark"] .cta-button:hover {
+		background-color: rgb(255 255 255);
+		color: rgb(0 0 0);
+	}
+</style>

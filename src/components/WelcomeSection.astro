@@ -1,0 +1,83 @@
+---
+import Button from "./ui/Button.astro";
+---
+
+<section
+	aria-label="Welcome section"
+	class="[--welcome-offset:6.5rem] theme-bg min-h-[calc(100svh-var(--welcome-offset))] rounded-2xl sm:[--welcome-offset:7.5rem]"
+>
+	<div
+		class="grid min-h-[calc(100svh-var(--welcome-offset))] grid-rows-[auto_1fr] content-start gap-10 p-6 sm:gap-12 sm:p-8 lg:grid-cols-2 lg:grid-rows-1 lg:content-normal lg:items-center lg:gap-12 lg:p-12"
+	>
+		<div
+			class="welcome-copy my-10 flex flex-col items-center justify-start text-center sm:my-12 lg:my-0 lg:mx-auto lg:w-full lg:max-w-xl lg:items-start lg:justify-center lg:text-left"
+		>
+			<h1 class="welcome-title theme-text text-4xl font-bold tracking-tight sm:text-5xl">
+				Hi, it's Jacob here
+			</h1>
+			<p class="welcome-description theme-text-muted mx-auto mt-6 max-w-xl text-base sm:mt-7 sm:text-lg lg:mx-0">
+				Welcome to my space on the internet. I mostly post about tech, coding, and my career experiences but some personal snippets might appear here too.
+			</p>
+			<div class="welcome-actions mt-10 flex flex-wrap justify-center gap-3 sm:mt-12 lg:justify-start">
+			<Button
+			href="/blog"
+			class="welcome-cta"
+			>
+				Blog
+			</Button>
+			<Button
+				href="/career"
+				class="welcome-cta"
+			>
+				Professional career
+			</Button>
+			</div>
+		</div>
+		<div class="theme-surface-strong h-full min-h-0 rounded-xl lg:min-h-[420px]" aria-hidden="true"></div>
+	</div>
+</section>
+
+<style>
+	.welcome-title,
+	.welcome-description,
+	.welcome-actions {
+		opacity: 0;
+		animation: welcome-fade 800ms ease-out both;
+		will-change: opacity;
+	}
+
+	.welcome-title {
+		animation-delay: 100ms;
+	}
+
+	.welcome-description {
+		animation-delay: 200ms;
+	}
+
+	.welcome-actions {
+		animation-delay: 650ms;
+	}
+
+	.welcome-cta {
+		animation: none;
+	}
+
+	@keyframes welcome-fade {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.welcome-title,
+		.welcome-description,
+		.welcome-actions,
+		.welcome-cta {
+			animation: none;
+			opacity: 1;
+		}
+	}
+</style>

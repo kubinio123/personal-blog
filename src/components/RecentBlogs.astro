@@ -1,0 +1,82 @@
+---
+import { getCollection } from "astro:content";
+import BlogCard from "./BlogCard.astro";
+
+const showDrafts = !import.meta.env.PROD;
+const allPosts = await getCollection("blog", ({ data }) => showDrafts || !data.draft);
+const recentPosts = allPosts
+	.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+	.slice(0, 2);
+---
+
+<section aria-label="Recent blog posts section" class="theme-bg rounded-2xl p-6 sm:p-8 lg:p-12">
+	<div class="recent-blogs-reveal mx-auto max-w-3xl text-center" style="--recent-delay: 0ms;">
+		<h2 class="theme-text text-3xl font-bold tracking-tight sm:text-4xl">
+			Recent posts
+		</h2>
+	</div>
+
+	{
+		recentPosts.length === 0 ? (
+			<p class="recent-blogs-reveal theme-text-muted mt-8" style="--recent-delay: 80ms;">No posts yet.</p>
+		) : (
+			<div class="mt-10 grid grid-cols-1 gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-6">
+				{
+					recentPosts.map((post, index) => (
+						<div class="recent-blogs-reveal" style={`--recent-delay: ${80 + index * 80}ms;`}>
+						<BlogCard
+							href={`/blog/${post.slug}/`}
+							title={post.data.title}
+							description={post.data.description}
+							category={post.data.category}
+							date={post.data.date}
+						/>
+						</div>
+					))
+				}
+			</div>
+		)
+	}
+</section>
+
+<style>
+	.recent-blogs-reveal {
+		opacity: 0;
+		transform: translateY(16px);
+		transition: opacity 500ms ease-out, transform 500ms ease-out;
+		transition-delay: var(--recent-delay, 0ms);
+	}
+
+	.recent-blogs-reveal.is-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.recent-blogs-reveal {
+			opacity: 1;
+			transform: none;
+			transition: none;
+		}
+	}
+</style>
+
+<script is:inline>
+	const recentBlogElements = document.querySelectorAll(".recent-blogs-reveal");
+
+	const recentBlogsObserver = new IntersectionObserver(
+		(entries, currentObserver) => {
+			for (const entry of entries) {
+				if (entry.isIntersecting) {
+					entry.target.classList.add("is-visible");
+					currentObserver.unobserve(entry.target);
+				}
+			}
+		},
+		{ threshold: 0.2 }
+	);
+
+	for (const element of recentBlogElements) {
+		recentBlogsObserver.observe(element);
+	}
+</script>

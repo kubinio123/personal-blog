@@ -1,0 +1,173 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BlogCard from "../components/BlogCard.astro";
+import Source from "../components/ui/Source.astro";
+import { getCollection } from "astro:content";
+
+const pageTitle = "Blog";
+const pageDescription = "Articles about Astro, frontend patterns, and shipping lean websites.";
+const showDrafts = !import.meta.env.PROD;
+const allPosts = await getCollection("blog", ({ data }) => showDrafts || !data.draft);
+const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const categories = ["All", ...new Set(posts.map((post) => post.data.category))];
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} path="/blog">
+	<section aria-label="Blog header and filters" class="theme-surface theme-border rounded-2xl border p-6 sm:p-8 lg:p-12">
+		<div class="mx-auto max-w-3xl text-center">
+			<h1 class="theme-text text-3xl font-bold tracking-tight sm:text-4xl">Blog</h1>
+			<p class="theme-text-muted mt-3">
+				Notes about performance, SEO, and practical implementation patterns.
+			</p>
+		</div>
+
+		<div class="mt-8 flex flex-wrap justify-center gap-3" aria-label="Filter posts by category">
+			{
+				categories.map((category, index) => (
+					<button
+						type="button"
+						data-filter-chip
+						data-category={category}
+						aria-pressed={index === 0 ? "true" : "false"}
+						class:list={[
+							"blog-filter-chip theme-border inline-flex items-center justify-center rounded-full border px-4 py-2 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400",
+							index === 0 && "is-active"
+						]}
+					>
+						{category}
+					</button>
+				))
+			}
+		</div>
+	</section>
+
+	<section aria-label="Blog cards" class="theme-surface theme-border rounded-2xl border p-6 sm:p-8 lg:p-12">
+		{
+			posts.length === 0 ? (
+				<p class="theme-text-muted">No posts yet.</p>
+			) : (
+				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6" data-post-list>
+					{
+						posts.map((post) => (
+							<div data-post-card data-category={post.data.category}>
+							<BlogCard
+								href={`/blog/${post.slug}/`}
+								title={post.data.title}
+								description={post.data.description}
+								category={post.data.category}
+								date={post.data.date}
+							/>
+							</div>
+						))
+					}
+				</div>
+			)
+		}
+	</section>
+
+	<section aria-label="Published elsewhere" class="theme-surface theme-border rounded-2xl border p-6 sm:p-8 lg:p-12">
+		<h2 class="theme-text text-center text-2xl font-bold tracking-tight sm:text-3xl">Published elsewhere</h2>
+		<ul class="mt-10 flex flex-wrap justify-center gap-3 sm:mt-12">
+			<Source
+				href="https://softwaremill.com/how-to-tackle-ecs-autoscaling/"
+				title="How to Tackle ECS Autoscaling?"
+				meta="May 2025"
+				iconMode="provider"
+			/>
+			<Source
+				href="https://softwaremill.com/web-app-security-training-should-you-take-one/"
+				title="Web App Security Training - Should You Take One?"
+				meta="Mar 2025"
+				iconMode="provider"
+			/>
+			<Source
+				href="https://softwaremill.com/getting-started-with-zio-part-3/"
+				title="Getting started with ZIO, part 3"
+				meta="Nov 2023"
+				iconMode="provider"
+			/>
+			<Source
+				href="https://softwaremill.com/getting-started-with-zio-part-2/"
+				title="Getting started with ZIO, part 2"
+				meta="Jul 2023"
+				iconMode="provider"
+			/>
+			<Source
+				href="https://softwaremill.com/getting-started-with-zio-part-1/"
+				title="Getting started with ZIO, part 1"
+				meta="Jun 2023"
+				iconMode="provider"
+			/>
+			<Source
+				href="https://softwaremill.com/hands-on-influxdb/"
+				title="Hands-on InfluxDB"
+				meta="Aug 2022"
+				iconMode="provider"
+			/>
+			<Source
+				href="https://softwaremill.com/hands-on-kafka-streams-in-scala/"
+				title="Hands-on Kafka Streams in Scala"
+				meta="Jan 2022"
+				iconMode="provider"
+			/>
+		</ul>
+	</section>
+</BaseLayout>
+
+<script is:inline>
+	const chips = Array.from(document.querySelectorAll("[data-filter-chip]"));
+	const cards = Array.from(document.querySelectorAll("[data-post-card]"));
+
+	for (const chip of chips) {
+		chip.addEventListener("click", () => {
+			const selectedCategory = chip.getAttribute("data-category") ?? "All";
+
+			for (const otherChip of chips) {
+				const isActive = otherChip === chip;
+				otherChip.setAttribute("aria-pressed", isActive ? "true" : "false");
+				otherChip.classList.toggle("is-active", isActive);
+			}
+
+			for (const card of cards) {
+				const cardCategory = card.getAttribute("data-category");
+				const shouldShow = selectedCategory === "All" || cardCategory === selectedCategory;
+				card.toggleAttribute("hidden", !shouldShow);
+			}
+		});
+	}
+</script>
+
+<style>
+	.blog-filter-chip {
+		border-color: rgb(0 0 0);
+		background: transparent;
+		color: rgb(0 0 0);
+	}
+
+	.blog-filter-chip:hover {
+		background: rgb(0 0 0);
+		color: rgb(255 255 255);
+	}
+
+	.blog-filter-chip.is-active {
+		border-color: rgb(0 0 0);
+		background: rgb(0 0 0);
+		color: rgb(255 255 255);
+	}
+
+	html[data-theme="dark"] .blog-filter-chip {
+		border-color: rgb(255 255 255);
+		color: rgb(255 255 255);
+	}
+
+	html[data-theme="dark"] .blog-filter-chip:hover {
+		background: rgb(255 255 255);
+		color: rgb(0 0 0);
+	}
+
+	html[data-theme="dark"] .blog-filter-chip.is-active {
+		border-color: rgb(255 255 255);
+		background: rgb(255 255 255);
+		color: rgb(0 0 0);
+	}
+</style>

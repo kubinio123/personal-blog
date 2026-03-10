@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CareerTimeline from "../components/CareerTimeline.astro";
+import RecentBlogs from "../components/RecentBlogs.astro";
+
+const pageTitle = "Jakub Cichy career";
+const pageDescription = "Jakub Cichy professional career overview.";
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} path="/career">
+	<section aria-label="Career header" class="rounded-2xl p-6 sm:p-8 lg:p-12">
+		<div class="mx-auto max-w-3xl text-center">
+		<h1 class="theme-text text-3xl font-bold tracking-tight sm:text-4xl">
+			Career
+		</h1>
+		<p class="theme-text-muted mt-3">
+			Where I've been and what I've done there.
+		</p>
+		</div>
+	</section>
+	<CareerTimeline />
+	<RecentBlogs />
+</BaseLayout>

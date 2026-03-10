@@ -1,0 +1,39 @@
+---
+interface Props {
+	heading?: string;
+	class?: string;
+}
+
+const { heading = "", class: className = "" } = Astro.props;
+const displayHeading = heading.trim();
+---
+
+<div class:list={["source-list-wrapper", className]}>
+	{displayHeading && <p class="source-list-heading">{displayHeading}</p>}
+	<ul class="source-list">
+		<slot />
+	</ul>
+</div>
+
+<style>
+	.source-list-wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.source-list-heading {
+		font-size: 0.8rem;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--theme-text-soft);
+	}
+
+	.source-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0;
+	}
+</style>

@@ -1,0 +1,209 @@
+---
+import Source from "./ui/Source.astro";
+import SourceList from "./ui/SourceList.astro";
+---
+
+<section
+	id="career-section"
+	aria-label="Career section"
+	class="career-wrapper rounded-2xl p-6 sm:p-8 lg:p-12"
+>
+	<ul class="career-list">
+		<li class="career-row">
+			<article
+				class="career-card career-placeholder flex flex-col rounded-xl border p-6"
+			>
+				<h3 class="text-lg font-semibold tracking-tight">
+					F1
+				</h3>
+				<p class="mt-3 text-sm leading-relaxed opacity-90">
+					xxx
+				</p>
+			</article>
+		</li>
+		<li class="career-row">
+			<article
+				class="career-card career-placeholder flex flex-col rounded-xl border p-6"
+			>
+				<h3 class="text-lg font-semibold tracking-tight">
+					F2
+				</h3>
+				<p class="mt-3 text-sm leading-relaxed opacity-90">
+					xxx
+				</p>
+			</article>
+		</li>
+		<li class="career-row">
+			<article
+				class="career-card career-placeholder flex flex-col rounded-xl border p-6"
+			>
+				<h3 class="text-lg font-semibold tracking-tight">
+					F1
+				</h3>
+				<p class="mt-3 text-sm leading-relaxed opacity-90">
+					xxx
+				</p>
+			</article>
+		</li>
+		<li class="career-row">
+			<article
+				class="career-card career-placeholder flex flex-col rounded-xl border p-6"
+			>
+				<h3 class="text-lg font-semibold tracking-tight">
+					F4
+				</h3>
+				<p class="mt-3 text-sm leading-relaxed opacity-90">
+					xxx
+				</p>
+			</article>
+		</li>
+		<li class="career-row">
+			<article
+				class="career-card career-placeholder flex flex-col rounded-xl border p-6"
+			>
+				<h3 class="text-lg font-semibold tracking-tight">
+					F5
+				</h3>
+				<p class="mt-3 text-sm leading-relaxed opacity-90">
+					xxx
+				</p>
+			</article>
+		</li>
+	</ul>
+</section>
+
+<style>
+	.career-wrapper {
+		background-color: var(--theme-bg);
+		scroll-margin-top: 7rem;
+	}
+
+	.career-list {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 7.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		--timeline-column: 1.75rem;
+		--timeline-gap: 1.25rem;
+		--line-progress: 0;
+	}
+
+	.career-list::after {
+		content: "";
+		position: absolute;
+		left: calc((var(--timeline-column) / 2) - 1px);
+		top: 0.75rem;
+		bottom: 0.75rem;
+		width: 2px;
+		background: var(--theme-text-soft);
+		transform: scaleY(var(--line-progress));
+		transform-origin: top;
+	}
+
+	.career-row {
+		display: grid;
+		grid-template-columns: var(--timeline-column) minmax(0, 1fr);
+		column-gap: var(--timeline-gap);
+		align-items: stretch;
+	}
+
+	.career-card {
+		grid-column: 2;
+		width: 100%;
+		background-color: var(--theme-surface);
+		border-color: var(--theme-border);
+	}
+
+	.career-placeholder {
+		opacity: 0;
+		transform: translateY(16px);
+		transition:
+			opacity 500ms ease-out,
+			transform 500ms ease-out;
+		transition-delay: var(--career-delay, 0ms);
+	}
+
+	.career-row.is-visible .career-placeholder {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	@media (min-width: 640px) {
+		.career-list {
+			gap: clamp(7.5rem, 15vw, 9rem);
+			--timeline-column: 2rem;
+			--timeline-gap: 1.5rem;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.career-list {
+			gap: clamp(10rem, 20vw, 12rem);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.career-placeholder {
+			opacity: 1;
+			transform: none;
+			transition: none;
+		}
+
+		.career-list::after {
+			transform: scaleY(1);
+		}
+	}
+</style>
+
+<script>
+	const careerSection =
+		document.querySelector<HTMLElement>("#career-section");
+	const careerList =
+		careerSection?.querySelector<HTMLElement>(".career-list");
+	const careerRows =
+		careerSection?.querySelectorAll<HTMLElement>(".career-row");
+	const prefersReducedMotion = window.matchMedia(
+		"(prefers-reduced-motion: reduce)",
+	).matches;
+
+	if (careerSection && careerList && careerRows) {
+		if (prefersReducedMotion) {
+			careerList.style.setProperty("--line-progress", "1");
+			careerRows.forEach((row) => row.classList.add("is-visible"));
+		} else {
+			const rows = Array.from(careerRows);
+
+			const updateTimeline = () => {
+				const viewportTrigger =
+					window.scrollY + window.innerHeight * 0.75;
+				const sectionTop = careerSection.offsetTop;
+				const sectionBottom = sectionTop + careerSection.offsetHeight;
+				const progress =
+					(viewportTrigger - sectionTop) /
+					(sectionBottom - sectionTop);
+				const clampedProgress = Math.max(0, Math.min(1, progress));
+
+				careerList.style.setProperty(
+					"--line-progress",
+					clampedProgress.toString(),
+				);
+
+				rows.forEach((row) => {
+					const rowTop = sectionTop + row.offsetTop;
+					const rowTrigger = rowTop + row.offsetHeight * 0.18;
+					const isVisible = viewportTrigger >= rowTrigger;
+					row.classList.toggle("is-visible", isVisible);
+				});
+			};
+
+			updateTimeline();
+			window.addEventListener("scroll", updateTimeline, {
+				passive: true,
+			});
+			window.addEventListener("resize", updateTimeline);
+		}
+	}
+</script>

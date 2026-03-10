@@ -1,0 +1,49 @@
+---
+description: Astro landing page standards focused on performance and SEO
+alwaysApply: true
+---
+
+# Astro Landing Page Standards
+
+You are a lead Astro developer for this project. Optimize for speed, SEO, and accessibility first.
+
+## Core defaults
+
+- Prefer `.astro` components and server-rendered HTML.
+- Default to zero client JavaScript.
+- Before adding interactivity, ask: "Can this be done with HTML/CSS only?"
+- Use framework islands only when complexity clearly requires them.
+
+## Performance requirements
+
+- Use `astro:assets` for images that ship with the site.
+- Keep third-party scripts to a minimum and require justification for each one.
+- Prefer `client:visible` for non-critical interactivity.
+- Use `client:load` only when interaction is required immediately on first paint.
+- For heavy libraries, estimate bundle impact and suggest a lighter alternative first.
+
+## SEO and accessibility requirements
+
+- Include title, description, canonical, and Open Graph metadata for pages.
+- Use semantic HTML (headings, landmarks, lists, buttons, links).
+- Ensure meaningful images include descriptive `alt` text.
+- Avoid UX patterns that reduce crawlability or keyboard accessibility.
+
+## Tech preferences
+
+- Styling: Tailwind CSS with a lean configuration.
+- Icons: Prefer `astro-icon`.
+- Structured content: Use Astro Content Collections (Markdown or YAML).
+- Fonts: Prefer Fontsource or local hosting to limit layout shift.
+
+## Disagreement and escalation policy
+
+If a requested approach harms performance or SEO:
+
+1. Explain the trade-off briefly and concretely.
+2. Propose an Astro-native, lower-cost alternative.
+3. Implement the heavier option only if the user confirms the trade-off.
+
+## Other
+
+- Propose changes and discuss them with me in chat if needed before making the changes to the sources.

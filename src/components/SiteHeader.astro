@@ -1,0 +1,361 @@
+---
+import Icon from "./ui/Icon.astro";
+import logoLight from "../assets/logo-light.svg";
+import logoDark from "../assets/logo-dark.svg";
+---
+
+<header class="site-header sticky top-0 z-50 py-4 sm:py-6">
+	<nav
+		aria-label="Primary navigation"
+		class="site-header-nav rounded-xl border p-4 theme-border"
+	>
+		<div class="relative flex items-center justify-between md:justify-center">
+			<a
+				href="/"
+				class="inline-flex md:absolute md:left-0"
+				aria-label="Go to home page"
+			>
+				<img src={logoLight.src} alt="jacob.log(...)" class="logo-light h-20 w-auto" />
+				<img src={logoDark.src} alt="jacob.log(...)" class="logo-dark h-20 w-auto" />
+			</a>
+		<ul class="site-header-desktop-only flex items-center gap-6">
+			<li>
+				<a
+					href="/blog"
+					class="site-header-link text-sm font-medium transition focus:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-sky-400"
+				>
+					Blog
+				</a>
+			</li>
+			<li>
+				<a
+					href="/career"
+					class="site-header-link text-sm font-medium transition focus:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-sky-400"
+				>
+					Career
+				</a>
+			</li>
+			</ul>
+			<button
+				id="theme-toggle-desktop"
+				type="button"
+				data-theme-toggle
+				class="site-theme-toggle site-header-desktop-only theme-border rounded-full border p-1 transition md:absolute md:right-0"
+				role="switch"
+				aria-label="Switch to dark theme"
+				aria-checked="false"
+			>
+				<span class="site-theme-toggle-track" aria-hidden="true">
+					<span class="site-theme-toggle-icon site-theme-toggle-icon-sun">
+						<Icon name="sun-01-duotone-standard" size={16} />
+					</span>
+					<span class="site-theme-toggle-thumb"></span>
+					<span class="site-theme-toggle-icon site-theme-toggle-icon-moon">
+						<Icon name="moon-02-duotone-standard" size={16} />
+					</span>
+				</span>
+			</button>
+
+			<details class="site-header-mobile-menu">
+				<summary
+					class="site-header-mobile-summary theme-border cursor-pointer rounded-lg border p-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+				>
+					<span class="sr-only">Open navigation menu</span>
+					<Icon name="menu-01-duotone-standard" size={20} decorative={false} label="Open navigation menu" />
+				</summary>
+				<div class="site-header-mobile-panel theme-border mt-2 rounded-lg border p-3">
+				<ul class="site-header-mobile-list flex flex-col gap-3">
+					<li>
+						<a
+							href="/career"
+							class="site-header-link site-header-mobile-link block rounded-md px-2 py-1 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+						>
+							Career
+						</a>
+					</li>
+					<li>
+						<a
+							href="/blog"
+							class="site-header-link site-header-mobile-link block rounded-md px-2 py-1 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+						>
+							Blog
+						</a>
+					</li>
+					</ul>
+					<div class="site-header-mobile-toggle-wrap mt-3 flex justify-start">
+						<button
+							id="theme-toggle-mobile"
+							type="button"
+							data-theme-toggle
+							class="site-theme-toggle theme-border rounded-full border p-1 transition"
+							role="switch"
+							aria-label="Switch to dark theme"
+							aria-checked="false"
+						>
+							<span class="site-theme-toggle-track" aria-hidden="true">
+								<span class="site-theme-toggle-icon site-theme-toggle-icon-sun">
+									<Icon name="sun-01-duotone-standard" size={16} />
+								</span>
+								<span class="site-theme-toggle-thumb"></span>
+								<span class="site-theme-toggle-icon site-theme-toggle-icon-moon">
+									<Icon name="moon-02-duotone-standard" size={16} />
+								</span>
+							</span>
+						</button>
+					</div>
+				</div>
+			</details>
+		</div>
+	</nav>
+</header>
+
+<style>
+	.site-header {
+		animation: header-enter 1200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+		will-change: transform, opacity;
+	}
+
+	.site-header-nav {
+		background-color: color-mix(in srgb, var(--theme-bg) 80%, transparent);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+	}
+
+	.site-header-link {
+		color: var(--theme-text-muted);
+	}
+
+	.site-header-link:hover {
+		color: var(--theme-link-hover);
+	}
+
+	.site-header-mobile-menu {
+		display: none;
+	}
+
+	.site-header-mobile-summary {
+		list-style: none;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--theme-text-muted);
+		background: var(--theme-surface-strong);
+	}
+
+	.site-header-mobile-summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.site-header-mobile-panel {
+		background: var(--theme-surface-strong);
+	}
+
+	.site-header-mobile-summary :global(svg) {
+		transition: transform 220ms ease;
+	}
+
+	.site-theme-toggle {
+		background: var(--theme-surface-strong);
+	}
+
+	.site-theme-toggle-track {
+		--toggle-width: 3.25rem;
+		--toggle-height: 1.6rem;
+		--toggle-padding: 0.2rem;
+		--thumb-size: 1.2rem;
+		position: relative;
+		display: block;
+		width: var(--toggle-width);
+		height: var(--toggle-height);
+		color: var(--theme-text-soft);
+	}
+
+	.site-theme-toggle-icon {
+		position: absolute;
+		top: 50%;
+		z-index: 2;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 1rem;
+		height: 1rem;
+		line-height: 1;
+		transform: translateY(-50%);
+		transition: color 180ms ease;
+	}
+
+	.site-theme-toggle-icon-sun {
+		left: 0.25rem;
+	}
+
+	.site-theme-toggle-icon-moon {
+		right: 0.25rem;
+	}
+
+	.site-theme-toggle-thumb {
+		position: absolute;
+		left: var(--toggle-padding);
+		top: 50%;
+		z-index: 1;
+		width: var(--thumb-size);
+		height: var(--thumb-size);
+		border-radius: 9999px;
+		background: var(--theme-text);
+		transform: translate(0, -50%);
+		transition: transform 180ms ease;
+	}
+
+	.site-theme-toggle[aria-checked="true"] .site-theme-toggle-thumb {
+		transform: translate(
+			calc(var(--toggle-width) - var(--thumb-size) - (var(--toggle-padding) * 2)),
+			-50%
+		);
+	}
+
+	.site-theme-toggle[aria-checked="false"] .site-theme-toggle-icon-sun,
+	.site-theme-toggle[aria-checked="true"] .site-theme-toggle-icon-moon {
+		color: var(--theme-text);
+	}
+
+	.site-theme-toggle:hover .site-theme-toggle-track {
+		color: var(--theme-text-muted);
+	}
+
+	@keyframes header-enter {
+		from {
+			opacity: 0;
+			transform: translateY(-16px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.site-header {
+			animation: none;
+		}
+
+		.site-header-mobile-summary :global(svg),
+		.site-header-mobile-menu .site-header-mobile-panel {
+			transition: none;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.site-header-desktop-only {
+			display: none;
+		}
+
+		.site-header-mobile-menu {
+			display: block;
+			position: static;
+		}
+
+		.site-header-mobile-menu[open] .site-header-mobile-summary {
+			color: var(--theme-link-hover);
+		}
+
+		.site-header-mobile-menu[open] .site-header-mobile-summary :global(svg) {
+			transform: rotate(90deg);
+		}
+
+		.site-header-mobile-menu .site-header-mobile-panel {
+			position: absolute;
+			top: calc(100% + 0.5rem);
+			left: 0;
+			right: 0;
+			z-index: 60;
+			width: auto;
+			opacity: 0;
+			visibility: hidden;
+			pointer-events: none;
+			transform: translateY(-8px) scale(0.98);
+			transform-origin: top right;
+			transition:
+				opacity 180ms ease,
+				transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+				visibility 0s linear 220ms;
+		}
+
+		.site-header-mobile-menu[open] .site-header-mobile-panel {
+			opacity: 1;
+			visibility: visible;
+			pointer-events: auto;
+			transform: translateY(0) scale(1);
+			transition:
+				opacity 180ms ease,
+				transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+				visibility 0s linear 0s;
+		}
+
+		.site-header-mobile-list {
+			align-items: flex-end;
+		}
+
+		.site-header-mobile-link {
+			text-align: right;
+		}
+
+		.site-header-mobile-toggle-wrap {
+			justify-content: flex-end;
+		}
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		const storageKey = "sct-theme";
+		const darkTheme = "dark";
+		const lightTheme = "light";
+
+		/** @type {NodeListOf<HTMLButtonElement>} */
+		const themeToggles = document.querySelectorAll("[data-theme-toggle]");
+
+		function readTheme() {
+			return document.documentElement.dataset.theme === darkTheme ? darkTheme : lightTheme;
+		}
+
+		function writeTheme(theme, persist) {
+			document.documentElement.dataset.theme = theme;
+			document.documentElement.style.colorScheme = theme;
+
+			if (persist) {
+				try {
+					localStorage.setItem(storageKey, theme);
+				} catch {
+					// Ignore storage write errors in restricted browsers.
+				}
+			}
+		}
+
+		function syncToggleUi(theme) {
+			if (!themeToggles.length) {
+				return;
+			}
+
+			const isDark = theme === darkTheme;
+			for (const themeToggle of themeToggles) {
+				themeToggle.setAttribute("aria-checked", isDark ? "true" : "false");
+				themeToggle.setAttribute(
+					"aria-label",
+					isDark ? "Switch to light theme" : "Switch to dark theme"
+				);
+			}
+		}
+
+		if (themeToggles.length) {
+			syncToggleUi(readTheme());
+
+			for (const themeToggle of themeToggles) {
+				themeToggle.addEventListener("click", () => {
+					const currentTheme = readTheme();
+					const nextTheme = currentTheme === darkTheme ? lightTheme : darkTheme;
+					writeTheme(nextTheme, true);
+					syncToggleUi(nextTheme);
+				});
+			}
+		}
+	})();
+</script>

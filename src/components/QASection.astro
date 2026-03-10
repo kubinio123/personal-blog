@@ -1,0 +1,66 @@
+---
+import Icon from "./ui/Icon.astro";
+
+const items = [
+	{ question: "Why did you start this blog?", answer: "I wanted to control my own narrative and have a place to share my thoughts and experiences (I'am bad at LinkedIn and social media by the way)." },
+	{ question: "Where are you based?", answer: "Wrocław, Poland. Borned and raised here. Working remotely." },
+	{ question: "What’s your current tech stack?", answer: "I'm never locked into any specifc stack, I do believe that languages and tools are just means to an end. Lately it's Scala, Pekko, TypeScript, Angular, Kafka, Elasticsearch and Postgres for building the core product; Python for utilities and scripts; AWS for running and scaling things." },
+	{ question: "What do you do when you're not coding?", answer: "My all time favorite activities are badminton, painting miniatures, skiing and long walks to clear my mind." },
+	{ question: "Are you open to new opportunities?", answer: "I'm currently focused on my role at SoftwareMill, the best place I've worked at so far." }
+];
+---
+
+<section aria-label="Questions and answers" class="theme-bg rounded-2xl p-6 sm:p-8 lg:p-12">
+	<h2 class="theme-text mx-auto mb-10 max-w-3xl text-center text-3xl font-bold tracking-tight sm:mb-12 sm:text-4xl">
+		Q&A
+	</h2>
+	<div class="mx-auto max-w-3xl space-y-4">
+		{items.map(({ question, answer }) => (
+			<details class="qa-panel theme-surface rounded-lg">
+				<summary class="qa-summary flex cursor-pointer select-none list-none items-center justify-between gap-4 px-5 py-4 font-medium [&::-webkit-details-marker]:hidden">
+					<span>{question}</span>
+					<span class="qa-icon shrink-0">
+						<Icon name="arrow-down-01-duotone-rounded" size={20} />
+					</span>
+				</summary>
+				<div class="qa-body">
+					<div class="qa-answer theme-text-muted px-5 pb-5 text-sm sm:text-base">
+						<p>{answer}</p>
+					</div>
+				</div>
+			</details>
+		))}
+	</div>
+</section>
+
+<style>
+	.qa-icon {
+		display: inline-flex;
+		transition: transform 300ms ease;
+	}
+
+	details[open] .qa-icon {
+		transform: rotate(180deg);
+	}
+
+	.qa-body {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 300ms ease;
+	}
+
+	details[open] .qa-body {
+		grid-template-rows: 1fr;
+	}
+
+	.qa-answer {
+		overflow: hidden;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.qa-icon,
+		.qa-body {
+			transition: none;
+		}
+	}
+</style>

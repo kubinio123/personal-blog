@@ -1,0 +1,17 @@
+---
+import QASection from "../components/QASection.astro";
+import OSSContributions from "../components/OSSContributions.astro";
+import WelcomeSection from "../components/WelcomeSection.astro";
+import RecentBlogs from "../components/RecentBlogs.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const pageTitle = "Landing Page Layout";
+const pageDescription = "Responsive landing page structure.";
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} path="/">
+	<WelcomeSection />
+	<RecentBlogs />
+	<QASection />
+	<OSSContributions />
+</BaseLayout>

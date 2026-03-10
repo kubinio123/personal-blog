@@ -1,0 +1,192 @@
+---
+interface Props {
+	href: string;
+	label?: string;
+	title?: string;
+	meta?: string;
+	iconMode?: "none" | "favicon" | "provider";
+	newTab?: boolean;
+	class?: string;
+}
+
+const {
+	href,
+	label,
+	title,
+	meta,
+	iconMode = "favicon",
+	newTab = true,
+	class: className = ""
+} = Astro.props;
+
+let parsedUrl: URL | null = null;
+
+try {
+	parsedUrl = new URL(href);
+} catch {
+	parsedUrl = null;
+}
+
+const hostname = parsedUrl?.hostname ?? "";
+const hostLabel = hostname.replace(/^www\./, "");
+const displayLabel = label?.trim() || hostLabel || href;
+const displayTitle = title?.trim();
+const shouldShowIcon = iconMode !== "none" && Boolean(hostname);
+
+let iconUrl: string | null = null;
+
+if (shouldShowIcon && parsedUrl) {
+	iconUrl =
+		iconMode === "provider"
+			? `https://www.google.com/s2/favicons?domain=${encodeURIComponent(hostname)}&sz=64`
+			: `${parsedUrl.origin}/favicon.ico`;
+}
+---
+
+<li class="source-item">
+	<a
+		href={href}
+		class:list={["source-link", className]}
+		target={newTab ? "_blank" : undefined}
+		rel={newTab ? "noopener noreferrer" : undefined}
+	>
+		{
+			iconUrl && (
+				<span
+					class="source-icon"
+					style={`background-image: url("${iconUrl}");`}
+					aria-hidden="true"
+				/>
+			)
+		}
+		<span class="source-content">
+			{displayTitle && <span class="source-title">{displayTitle}</span>}
+			<span class="source-meta">
+				<span class="source-label">{displayLabel}</span>
+				{meta && <span>{meta}</span>}
+				{newTab && <span class="source-external" aria-hidden="true">↗</span>}
+				{newTab && <span class="sr-only">(opens in a new tab)</span>}
+			</span>
+		</span>
+	</a>
+</li>
+
+<style>
+	.source-item {
+		list-style: none;
+	}
+
+	.source-link {
+		display: inline-flex;
+		gap: 0.75rem;
+		align-items: center;
+		max-width: 100%;
+		padding: 0.75rem;
+		border: 1px solid var(--theme-border);
+		border-radius: 0.75rem;
+		background: var(--theme-surface);
+		color: var(--theme-text);
+		text-decoration: none;
+		transform-origin: center;
+		box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+		transition:
+			transform 220ms ease,
+			border-color 220ms ease,
+			background-color 220ms ease,
+			box-shadow 220ms ease;
+	}
+
+	.source-link:hover {
+		transform: translateY(-2px);
+		border-color: var(--theme-text-soft);
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+	}
+
+	.source-link:focus-visible {
+		outline: 2px solid var(--theme-text-soft);
+		outline-offset: 2px;
+	}
+
+	.source-icon {
+		display: inline-block;
+		width: 1.25rem;
+		height: 1.25rem;
+		flex-shrink: 0;
+		border-radius: 9999px;
+		background-color: var(--theme-surface-strong);
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		transition:
+			transform 220ms ease,
+			filter 220ms ease;
+	}
+
+	.source-content {
+		display: inline-flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+
+	.source-title {
+		font-size: 0.9rem;
+		font-weight: 600;
+		line-height: 1.35;
+		text-decoration: underline;
+		text-decoration-color: transparent;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.18em;
+		transition:
+			text-decoration-color 220ms ease,
+			color 220ms ease;
+	}
+
+	.source-meta {
+		display: inline-flex;
+		gap: 0.5rem;
+		align-items: center;
+		flex-wrap: wrap;
+		font-size: 0.78rem;
+		color: var(--theme-text-muted);
+	}
+
+	.source-label {
+		color: var(--theme-text-soft);
+	}
+
+	.source-external {
+		transition:
+			transform 220ms ease,
+			color 220ms ease;
+	}
+
+	.source-link:hover .source-title,
+	.source-link:focus-visible .source-title {
+		text-decoration-color: currentColor;
+	}
+
+	.source-link:hover .source-icon,
+	.source-link:focus-visible .source-icon {
+		transform: scale(1.08);
+		filter: saturate(1.05);
+	}
+
+	.source-link:hover .source-external,
+	.source-link:focus-visible .source-external {
+		transform: translate(1px, -1px);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.source-link,
+		.source-icon,
+		.source-title,
+		.source-external {
+			transition: none;
+		}
+
+		.source-link:hover {
+			transform: none;
+			box-shadow: none;
+		}
+	}
+</style>

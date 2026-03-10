@@ -1,0 +1,24 @@
+---
+import Source from "./ui/Source.astro";
+---
+
+<section aria-label="Open-source contributions" class="theme-bg rounded-2xl p-6 sm:p-8 lg:p-12">
+	<h2 class="theme-text text-center text-2xl font-bold tracking-tight sm:text-3xl">OSS contributions</h2>
+	<ul class="mt-10 flex flex-wrap justify-center gap-3 sm:mt-12">
+		<Source
+			href="https://github.com/softwaremill/tapir/issues?q=is%3Apr%20author%3Akubinio123%20state%3Aclosed&page=1"
+			title="tapir"
+			iconMode="provider"
+		/>
+		<Source
+			href="https://github.com/softwaremill/sttp/issues?q=is%3Apr%20author%3Akubinio123%20state%3Aclosed&page=1"
+			title="sttp"
+			iconMode="provider"
+		/>
+		<Source
+			href="https://github.com/softwaremill/magnolia/issues?q=is%3Apr%20author%3Akubinio123%20state%3Aclosed&page=1"
+			title="magnolia"
+			iconMode="provider"
+		/>
+	</ul>
+</section>
