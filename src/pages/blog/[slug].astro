@@ -34,7 +34,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.
 	<div class="mx-auto flex w-full max-w-6xl flex-col gap-6">
 		<div class="lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-8">
 			<aside class="hidden lg:block">
-				<nav aria-label="Table of contents" class="theme-surface theme-border sticky top-28 rounded-2xl border p-5">
+				<nav aria-label="Table of contents" class="theme-bg theme-border sticky top-28 rounded-2xl border p-5">
 					<p class="theme-text-muted text-xs font-semibold uppercase tracking-wide">Table of contents</p>
 					{
 						tocHeadings.length === 0 ? (
@@ -62,7 +62,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.
 				</nav>
 			</aside>
 
-			<article class="theme-surface theme-border w-full rounded-2xl border p-6 sm:p-8 lg:p-10">
+			<article class="theme-bg w-full rounded-2xl p-6 sm:p-8 lg:p-10">
 				<header class="theme-border border-b pb-6">
 					<p class="blog-category-pill inline-flex items-center rounded-full px-3 py-1 text-xs">{post.data.category}</p>
 					<h1 class="theme-text mt-4 text-3xl font-bold tracking-tight sm:text-4xl">{post.data.title}</h1>
@@ -74,7 +74,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.
 					</div>
 				</header>
 
-			<div class="blog-content theme-text mt-8 space-y-4 leading-7">
+			<div class="blog-content prose prose-slate dark:prose-invert mt-8 max-w-none">
 				<Content />
 			</div>
 
@@ -116,10 +116,21 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.
 		color: var(--theme-text-muted);
 	}
 
-	.blog-content :global(a) {
-		color: var(--theme-link);
-		text-decoration: underline;
-		text-underline-offset: 2px;
+	.blog-content {
+		--tw-prose-body: var(--theme-text);
+		--tw-prose-headings: var(--theme-text);
+		--tw-prose-links: var(--theme-link);
+		--tw-prose-bold: var(--theme-text);
+		--tw-prose-counters: var(--theme-text-soft);
+		--tw-prose-bullets: var(--theme-text-soft);
+		--tw-prose-hr: var(--theme-border);
+		--tw-prose-quotes: var(--theme-text-muted);
+		--tw-prose-quote-borders: var(--theme-border);
+		--tw-prose-code: var(--theme-text);
+		--tw-prose-pre-code: var(--theme-text);
+		--tw-prose-pre-bg: var(--theme-surface-strong);
+		--tw-prose-th-borders: var(--theme-border);
+		--tw-prose-td-borders: var(--theme-border);
 	}
 
 	.blog-content :global(a:hover) {
